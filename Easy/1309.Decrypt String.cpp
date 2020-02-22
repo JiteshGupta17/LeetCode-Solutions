@@ -1,7 +1,6 @@
 class Solution {
 public:
     string freqAlphabets(string s) {
-        
         int n = s.length();
         
         string ans = "";
