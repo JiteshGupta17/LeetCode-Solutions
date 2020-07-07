@@ -1,4 +1,5 @@
 
+// Recursive
 class Solution {
 public:
     int n;
@@ -14,7 +15,6 @@ public:
 
         if (idx == n) return;
 
-        // More time
         // if(target>=candidates[idx])
         // {
         //     cur.push_back(candidates[idx]);
@@ -24,7 +24,6 @@ public:
 
         // solve(idx+1,candidates,target ,cur);
 
-        // Less time
         for (int i = idx; i < n; i++)
         {
             if (target - candidates[i] >= 0)
@@ -45,42 +44,29 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////
 
+// Iterative DP
 class Solution {
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
 
-        set<multiset<int>> res[target + 1];
+        vector<vector<int>> dp[target + 1];
+        dp[0] = {{}}; // Initialising a empty vector
 
-        for (int i = 0; i <= target; i++)
+        for (int coin : candidates)
         {
-            for (int coin : candidates)
+            for (int amount = 1; amount <= target; amount++)
             {
-                if (i - coin >= 0)
+                if (amount - coin >= 0)
                 {
-                    if (i - coin == 0)
+                    for (auto vec : dp[amount - coin])
                     {
-                        multiset<int> v = {coin};
-                        res[i].insert(v);
-                    }
-                    else if (!res[i - coin].empty())
-                    {
-                        for (auto vec : res[i - coin])
-                        {
-                            vec.insert(coin);
-                            res[i].insert(vec);
-                        }
+                        vec.push_back(coin);
+                        dp[amount].push_back(vec);
                     }
                 }
             }
         }
 
-        vector<vector<int>> ans;
-        for (auto s : res[target])
-        {
-            vector<int> v(s.begin(), s.end());
-            ans.push_back(v);
-        }
-
-        return ans;
+        return dp[target];
     }
 };
